@@ -32,20 +32,20 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String USERNAME = "_userName";
     private static final String PASSWORD = "_password";
 
-    private static final String HOLESID = "_holesId";
-    private static final String COURSEID = "_courseId";
+    private static final String HOLES_ID = "_holesId";
+    private static final String COURSE_ID = "_courseId";
     private static final String COORDINATEX = "_coordinateX";
     private static final String COORDINATEY = "_coordinateY";
     private static final String CONFIRMATIONSTATUS = "_confirmationStatus";
 
-    //private static final String COURSEID = "_courseId";
-    //private static final String USERID = "_userId";
+    //private static final String COURSE_ID = "_courseId";
+    //private static final String USER_ID = "_userId";
     private static final String INITIALCOORDINATEX = "_initialCoordinateX";
     private static final String INITIALCOORDINATEY = "_initialCoordinateY";
     private static final String INITIALDATETIME = "_initialDateTime";
 
-    private static final String COURSEDETAILID = "_courseDetailId";
-    //private static final String COURSEID = "_courseId";
+    private static final String COURSEDETAIL_ID = "_courseDetailId";
+    //private static final String COURSE_ID = "_courseId";
     private static final String ORDER = "_order";
     //private static final String COORDINATEX = "_coordinateX";
     //private static final String COORDINATEY = "_coordinateY";
@@ -63,16 +63,37 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-                + USER_ID + " INTEGER PRIMARY KEY, "
+                + USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + USERNAME + " TEXT, "
                 + PASSWORD + " TEXT)";
+
         db.execSQL(CREATE_USER_TABLE);
+
+        /*String CREATE_HOLE_TABLE = "CREATE TABLE " + TABLE_HOLE + "("
+                + HOLES_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COURSE_ID + " INTEGER, "
+                + COORDINATEX + " DOUBLE, "
+                + COORDINATEY + " DOUBLE, "
+                + CONFIRMATIONSTATUS + " INTEGER)";
+                //+ "FOREIGN KEY (" + COURSE_ID + " REFERENCES " + TABLE_COURSE + "( " + COURSE_ID +"))";
+
+        db.execSQL(CREATE_HOLE_TABLE);
+*/
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOLE);
+        /*db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE_DETAIL);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COURSE);*/
 
+        // Create tables again
+        onCreate(db);
     }
+
 
     public void addNewUser(User newUser)
     {
@@ -85,16 +106,52 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(TABLE_USER, null, values);
         db.close();
     }
-    // Getting users Count
-    public int getUsersCount() {
-        String countQuery = "SELECT * FROM " + TABLE_USER;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        cursor.close();
 
-    // return count
-        return cursor.getCount();
+    public boolean updateUser(int updUserId, String upduserName, String updPassword){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues args = new ContentValues();
+
+
+        args.put(USERNAME, upduserName);
+        args.put(PASSWORD, updPassword);
+
+        return db.update(TABLE_USER, args, USER_ID + "=" + updUserId, null) > 0;
     }
+
+    public boolean deleteUser(int delID){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        return db.delete(TABLE_USER, USER_ID + "=" + delID, null) > 0;
+    }
+
+
+
+   /* public void addNewHole(Hole newHole)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put(COURSE_ID, newHole.get_courseId());
+        values.put(COORDINATEX, newHole.get_coordinateX());
+        values.put(COORDINATEY, newHole.get_coordinateY());
+        values.put(CONFIRMATIONSTATUS, newHole.get_confirmationStatus());
+
+        db.insert(TABLE_HOLE, null, values);
+        db.close();
+    }*/
+////    // Getting users Count
+////    public int getUsersCount() {
+////        String countQuery = "SELECT * FROM " + TABLE_USER;
+////        SQLiteDatabase db = this.getReadableDatabase();
+////        Cursor cursor = db.rawQuery(countQuery, null);
+////        cursor.close();
+////
+////    // return count
+////        return cursor.getCount();
+//    }
 
     public void addNewCourse(Course newCourse)
     {
@@ -115,7 +172,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
-        values.put(COURSEID, newCourseDetail.get_courseId());
+        values.put(COURSE_ID, newCourseDetail.get_courseId());
         values.put(ORDER, newCourseDetail.get_order());
         values.put(COORDINATEX, newCourseDetail.get_coordinateX());
         values.put(COORDINATEY, newCourseDetail.get_coordinateY());
@@ -125,17 +182,5 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();;
     }
 
-    public void addNewHole(Hole newHole)
-    {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
 
-        values.put(COURSEID, newHole.get_courseId());
-        values.put(COORDINATEX, newHole.get_coordinateX());
-        values.put(COORDINATEY, newHole.get_coordinateY());
-        values.put(CONFIRMATIONSTATUS, newHole.get_confirmationStatus());
-
-        db.insert(TABLE_HOLE, null, values);
-        db.close();;
-    }
 }

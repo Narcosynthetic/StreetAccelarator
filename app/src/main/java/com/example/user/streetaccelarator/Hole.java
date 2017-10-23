@@ -6,18 +6,18 @@ package com.example.user.streetaccelarator;
 
 public class Hole {
 
-    int _holesId;
+    int _holeId;
     int _courseId;
     double _coordinateX;
     double _coordinateY;
     int _confirmationStatus;
 
     public int get_holesId() {
-        return _holesId;
+        return _holeId;
     }
 
     public void set_holesId(int _holesId) {
-        this._holesId = _holesId;
+        this._holeId = _holesId;
     }
 
     public int get_courseId() {
@@ -66,9 +66,9 @@ public class Hole {
     }
 
     //constructor for Update, Delete
-    public Hole(int _holesId, int _courseId, double _coordinateX, double _coordinateY, int _confirmationStatus){
+    public Hole(int _holeId, int _courseId, double _coordinateX, double _coordinateY, int _confirmationStatus){
 
-        this._holesId = _holesId;
+        this._holeId = _holeId;
         this._courseId = _courseId;
         this._coordinateX = _coordinateX;
         this. _coordinateY = _coordinateY;

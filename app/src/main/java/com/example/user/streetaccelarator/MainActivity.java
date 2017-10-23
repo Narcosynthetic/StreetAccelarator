@@ -29,9 +29,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         db = new DBHandler(this);
 
-        User nUser = new User("John", "1");
+        User nUser = new User("aaaa", "hfsiuhgw");
                 db.addNewUser(nUser);
-        int test = db.getUsersCount();
+        User nUser1 = new User("bbb", "fefefw");
+        db.addNewUser(nUser1);
+        User nUser2 = new User("qwdsdg", "qwefgw");
+        db.addNewUser(nUser2);
+
+        User updUser = new User();
+        db.updateUser(updUser);
+
+        User dltUser = new User()
+//        int test = db.getUsersCount();*/
+
+        /*Hole nHole = new Hole (0, 1, 2, 1);
+                db.addNewHole(nHole);*/
+
+
+
 
         final Button btnRegisterHole = (Button) findViewById(R.id.btnRegisterHole);
         btnRegisterHole.setOnClickListener(new View.OnClickListener(){
